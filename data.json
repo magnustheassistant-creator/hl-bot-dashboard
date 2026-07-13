@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-07-13T13:44:46.175854+00:00",
+  "generated_at": "2026-07-13T13:49:50.448730+00:00",
   "mode": "DRY_RUN (mainnet candles, no orders)",
   "symbols": [
     "BTC",
     "ETH",
     "SOL"
   ],
-  "bot_uptime_seconds": 20586,
+  "bot_uptime_seconds": 20890,
   "stats": {
-    "signals_fired": 19,
-    "open_positions": 0,
+    "signals_fired": 21,
+    "open_positions": 2,
     "trades_closed": 19,
     "wins": 13,
     "win_rate_pct": 68.42,
@@ -95,6 +95,28 @@
     }
   ],
   "recent_signals": [
+    {
+      "symbol": "BTC",
+      "side": "long",
+      "entry": 62287.0,
+      "target": 62473.86099999999,
+      "stop": 62162.426,
+      "conf": 0.8,
+      "vol": 1.69,
+      "opened_ts": 1783950300.0,
+      "status": "open"
+    },
+    {
+      "symbol": "SOL",
+      "side": "long",
+      "entry": 75.273,
+      "target": 75.49881899999998,
+      "stop": 75.12245399999999,
+      "conf": 0.8,
+      "vol": 1.62,
+      "opened_ts": 1783950300.0,
+      "status": "open"
+    },
     {
       "symbol": "SOL",
       "side": "long",
@@ -343,22 +365,11 @@
       "vol": 6.47,
       "opened_ts": 1783932600.0,
       "status": "open"
-    },
-    {
-      "symbol": "SOL",
-      "side": "short",
-      "entry": 76.802,
-      "target": 76.571594,
-      "stop": 76.95560400000001,
-      "conf": 0.8,
-      "vol": 1.68,
-      "opened_ts": 1783932600.0,
-      "status": "open"
     }
   ],
   "last_mids": {
-    "BTC": 62317.5,
-    "ETH": 1768.05,
-    "SOL": 75.3195
+    "BTC": 62356.5,
+    "ETH": 1768.45,
+    "SOL": 75.267
   }
 }
