@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-07-13T13:39:41.390951+00:00",
+  "generated_at": "2026-07-13T13:44:46.175854+00:00",
   "mode": "DRY_RUN (mainnet candles, no orders)",
   "symbols": [
     "BTC",
     "ETH",
     "SOL"
   ],
-  "bot_uptime_seconds": 20281,
+  "bot_uptime_seconds": 20586,
   "stats": {
-    "signals_fired": 12,
+    "signals_fired": 19,
     "open_positions": 0,
-    "trades_closed": 12,
-    "wins": 6,
-    "win_rate_pct": 50.0,
-    "total_sim_pnl_pct": 0.6,
+    "trades_closed": 19,
+    "wins": 13,
+    "win_rate_pct": 68.42,
+    "total_sim_pnl_pct": 2.7,
     "max_drawdown_pct": -0.6
   },
   "equity_curve": [
@@ -64,9 +64,135 @@
     {
       "ts": 1783949100.0,
       "pnl_pct": 0.3
+    },
+    {
+      "ts": 1783950000.0,
+      "pnl_pct": 0.3
+    },
+    {
+      "ts": 1783950000.0,
+      "pnl_pct": 0.3
+    },
+    {
+      "ts": 1783950000.0,
+      "pnl_pct": 0.3
+    },
+    {
+      "ts": 1783950000.0,
+      "pnl_pct": 0.3
+    },
+    {
+      "ts": 1783950000.0,
+      "pnl_pct": 0.3
+    },
+    {
+      "ts": 1783950000.0,
+      "pnl_pct": 0.3
+    },
+    {
+      "ts": 1783950000.0,
+      "pnl_pct": 0.3
     }
   ],
   "recent_signals": [
+    {
+      "symbol": "SOL",
+      "side": "long",
+      "entry": 75.399,
+      "target": 75.62519699999999,
+      "stop": 75.248202,
+      "conf": 0.8,
+      "vol": 1.75,
+      "opened_ts": 1783950000.0,
+      "status": "closed",
+      "outcome": "win",
+      "pnl_pct": 0.3,
+      "closed_ts": 1783950000.0
+    },
+    {
+      "symbol": "BTC",
+      "side": "long",
+      "entry": 62280.0,
+      "target": 62466.84,
+      "stop": 62155.44,
+      "conf": 0.8,
+      "vol": 1.89,
+      "opened_ts": 1783950000.0,
+      "status": "closed",
+      "outcome": "win",
+      "pnl_pct": 0.3,
+      "closed_ts": 1783950000.0
+    },
+    {
+      "symbol": "SOL",
+      "side": "long",
+      "entry": 75.288,
+      "target": 75.51386399999998,
+      "stop": 75.137424,
+      "conf": 1.0,
+      "vol": 3.09,
+      "opened_ts": 1783950000.0,
+      "status": "closed",
+      "outcome": "win",
+      "pnl_pct": 0.3,
+      "closed_ts": 1783950000.0
+    },
+    {
+      "symbol": "BTC",
+      "side": "long",
+      "entry": 62264.0,
+      "target": 62450.791999999994,
+      "stop": 62139.472,
+      "conf": 1.0,
+      "vol": 2.3,
+      "opened_ts": 1783950000.0,
+      "status": "closed",
+      "outcome": "win",
+      "pnl_pct": 0.3,
+      "closed_ts": 1783950000.0
+    },
+    {
+      "symbol": "SOL",
+      "side": "long",
+      "entry": 75.24,
+      "target": 75.46571999999999,
+      "stop": 75.08952,
+      "conf": 1.0,
+      "vol": 3.88,
+      "opened_ts": 1783950000.0,
+      "status": "closed",
+      "outcome": "win",
+      "pnl_pct": 0.3,
+      "closed_ts": 1783950000.0
+    },
+    {
+      "symbol": "BTC",
+      "side": "long",
+      "entry": 62318.0,
+      "target": 62504.95399999999,
+      "stop": 62193.364,
+      "conf": 1.0,
+      "vol": 3.05,
+      "opened_ts": 1783950000.0,
+      "status": "closed",
+      "outcome": "win",
+      "pnl_pct": 0.3,
+      "closed_ts": 1783950000.0
+    },
+    {
+      "symbol": "SOL",
+      "side": "long",
+      "entry": 75.319,
+      "target": 75.544957,
+      "stop": 75.168362,
+      "conf": 1.0,
+      "vol": 4.26,
+      "opened_ts": 1783950000.0,
+      "status": "closed",
+      "outcome": "win",
+      "pnl_pct": 0.3,
+      "closed_ts": 1783950000.0
+    },
     {
       "symbol": "BTC",
       "side": "long",
@@ -231,8 +357,8 @@
     }
   ],
   "last_mids": {
-    "BTC": 62600.5,
-    "ETH": 1773.05,
-    "SOL": 75.6565
+    "BTC": 62317.5,
+    "ETH": 1768.05,
+    "SOL": 75.3195
   }
 }
