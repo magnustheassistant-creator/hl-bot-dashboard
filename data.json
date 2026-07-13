@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-07-13T14:25:20.669590+00:00",
+  "generated_at": "2026-07-13T14:29:23.346482+00:00",
   "mode": "DRY_RUN (mainnet candles, no orders)",
   "symbols": [
     "BTC",
     "ETH",
     "SOL"
   ],
-  "bot_uptime_seconds": 23020,
+  "bot_uptime_seconds": 23263,
   "stats": {
     "signals_fired": 22,
     "open_positions": 0,
@@ -389,8 +389,8 @@
     }
   ],
   "last_mids": {
-    "BTC": 62478.5,
-    "ETH": 1771.25,
-    "SOL": 75.9135
+    "BTC": 62600.5,
+    "ETH": 1772.95,
+    "SOL": 75.9055
   }
 }
