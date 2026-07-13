@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HL Stack — Phase 1 DRY_RUN Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0b0b12; --card:#15151f; --card2:#1c1c2b; --txt:#e8e8f0;
+    --muted:#9a9ab0; --purple:#8b5cf6; --cyan:#22d3ee; --pink:#ec4899;
+    --green:#34d399; --red:#f87171; --border:#2a2a3a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:24px}
+  h1{font-size:20px;margin:0 0 2px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:18px}
+  .badge{display:inline-block;background:var(--card2);border:1px solid var(--border);
+    color:var(--cyan);padding:2px 10px;border-radius:999px;font-size:12px;margin-left:8px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px}
+  .stat .k{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  .stat .v{font-size:26px;font-weight:700;margin-top:6px}
+  .v.green{color:var(--green)} .v.red{color:var(--red)} .v.purple{color:var(--purple)}
+  .panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:20px}
+  .panel h2{font-size:14px;margin:0 0 12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border)}
+  th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase}
+  .tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11px}
+  .tag.open{background:#3b2f0a;color:#fbbf24}
+  .tag.win{background:#0c2e1f;color:var(--green)}
+  .tag.loss{background:#3a0f17;color:var(--red)}
+  .tag.long{background:#0c2333;color:var(--cyan)}
+  .tag.short{background:#2a1033;color:var(--pink)}
+  .mids{display:flex;gap:16px;flex-wrap:wrap;font-size:13px}
+  .mids span b{color:var(--purple)}
+  #updated{color:var(--muted);font-size:12px;margin-top:8px}
+  canvas{max-height:260px}
+</style>
+</head>
+<body>
+  <h1>Hyperliquid Stack <span class="badge" id="mode">DRY_RUN</span></h1>
+  <div class="sub">Phase 1 validation — Bot 4 orderbook scalper on mainnet candles. No real orders. <span id="uptime"></span></div>
+
+  <div class="grid" id="stats"></div>
+
+  <div class="panel">
+    <h2>Simulated Equity Curve (cumulative %)</h2>
+    <canvas id="equity"></canvas>
+  </div>
+
+  <div class="panel">
+    <h2>Live Mids</h2>
+    <div class="mids" id="mids"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Recent Signals (last 20)</h2>
+    <table>
+      <thead><tr><th>Time</th><th>Symbol</th><th>Side</th><th>Entry</th><th>Target</th><th>Stop</th><th>Conf</th><th>Vol×</th><th>Status</th></tr></thead>
+      <tbody id="signals"></tbody>
+    </table>
+  </div>
+
+  <div id="updated"></div>
+
+<script>
+const fmt = (n,d=2)=> n==null ? '—' : Number(n).toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d});
+const ago = ts => { if(!ts) return ''; const s=Math.floor(Date.now()/1000-ts); if(s<60)return s+'s ago'; if(s<3600)return Math.floor(s/60)+'m ago'; return Math.floor(s/3600)+'h ago'; };
+
+async function load(){
+  let d;
+  try { d = await (await fetch('data.json?t='+Date.now())).json(); }
+  catch(e){ document.getElementById('updated').textContent='fetch failed: '+e; return; }
+  const s = d.stats||{};
+  const cards = [
+    ['Signals Fired', s.signals_fired, ''],
+    ['Win Rate', fmt(s.win_rate_pct,1)+'%', s.win_rate_pct>=55?'green':''],
+    ['Total Sim P&L', fmt(s.total_sim_pnl_pct,2)+'%', s.total_sim_pnl_pct>0?'green':(s.total_sim_pnl_pct<0?'red':'')],
+    ['Trades Closed', s.trades_closed, ''],
+    ['Open Pos', s.open_positions, 'purple'],
+    ['Max DD', fmt(s.max_drawdown_pct,2)+'%', 'red'],
+  ];
+  document.getElementById('stats').innerHTML = cards.map(([k,v,c])=>
+    `<div class="stat"><div class="k">${k}</div><div class="v ${c}">${v}</div></div>`).join('');
+  document.getElementById('mode').textContent = d.mode||'DRY_RUN';
+  document.getElementById('uptime').textContent = d.bot_uptime_seconds ? '· up '+Math.floor(d.bot_uptime_seconds/60)+'m' : '';
+
+  // equity cumulative
+  const eq = (d.equity_curve||[]).reduce((acc,p)=>{ const last=acc.length?acc[acc.length-1].y:0; acc.push({x:ago(p.ts), y:+(last+p.pnl_pct).toFixed(4)}); return acc; }, []);
+  if(window._chart){ window._chart.data.labels=eq.map(e=>e.x); window._chart.data.datasets[0].data=eq.map(e=>e.y); window._chart.update('none'); }
+  else if(eq.length){ new Chart(document.getElementById('equity'),{type:'line',data:{labels:eq.map(e=>e.x),datasets:[{label:'Cumulative %',data:eq.map(e=>e.y),borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,.15)',fill:true,tension:.25,pointRadius:0}]},options:{plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#9a9ab0',maxTicksLimit:8},grid:{color:'#2a2a3a'}},y:{ticks:{color:'#9a9ab0'},grid:{color:'#2a2a3a'}}}}}); }
+
+  // mids
+  const m = d.last_mids||{};
+  document.getElementById('mids').innerHTML = Object.entries(m).map(([k,v])=>`<span>${k} <b>$${fmt(v, v>100?2:4)}</b></span>`).join('');
+
+  // signals
+  document.getElementById('signals').innerHTML = (d.recent_signals||[]).map(s=>{
+    const side = `<span class="tag ${s.side}">${s.side.toUpperCase()}</span>`;
+    const st = s.status==='open' ? `<span class="tag open">OPEN</span>` : `<span class="tag ${s.outcome}">${s.outcome.toUpperCase()}</span>`;
+    return `<tr><td>${ago(s.opened_ts)}</td><td>${s.symbol}</td><td>${side}</td><td>${fmt(s.entry,4)}</td><td>${fmt(s.target,4)}</td><td>${fmt(s.stop,4)}</td><td>${fmt(s.conf,2)}</td><td>${fmt(s.vol,2)}</td><td>${st}</td></tr>`;
+  }).join('') || '<tr><td colspan="9" style="color:var(--muted)">No signals yet — Bot 4 is watching the bands.</td></tr>';
+
+  document.getElementById('updated').textContent = 'Updated ' + new Date((d.generated_at||'')).toLocaleString();
+}
+load(); setInterval(load, 60000);
+</script>
+</body>
+</html>
